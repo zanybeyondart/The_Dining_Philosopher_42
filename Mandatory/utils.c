@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:52:56 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/12 16:51:30 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/18 14:49:39 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	free_program(t_philo *philo)
 	if (philo->next != NULL)
 		free_program(philo->next);
 	free(philo->my_fork);
+	pthread_mutex_destroy(philo->my_mutex);
 	free(philo->my_mutex);
 	free(philo);
 }
@@ -61,7 +62,6 @@ void	add_to_list(t_philo *philo, int index)
 	philo->next = temp;
 	return ;
 }
-
 
 t_philo	*init_thread(int philos)
 {

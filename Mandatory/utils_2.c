@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:11:54 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/12 17:28:46 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/18 14:31:47 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,30 @@ int	not_dead(t_main *main, t_philo *philos)
 {
 	if (philos == NULL || main->philo_dead == 1)
 		return (1);
-	// pthread_mutex_lock(&main->p_lock);
 	if (philos->eating == 1)
-	{
-		// pthread_mutex_unlock(&main->p_lock);
-		return (not_dead(main,philos->next));
-	}
-	// else
-	// 	pthread_mutex_unlock(&main->p_lock);
-	// pthread_mutex_lock(&main->p_lock);
+		return (not_dead(main, philos->next));
 	if (current_time(philos) - philos->last_meal >= main->dead_time
 		&& main->philo_dead != 1)
 	{
-		// pthread_mutex_unlock(&main->p_lock);
 		printf("%d %d died\n", current_time(philos), philos->id);
 		main->philo_dead = 1;
-		return (not_dead(main,philos->next));
+		return (not_dead(main, philos->next));
 	}
-	// else
-	// {
-	// 	pthread_mutex_unlock(&main->p_lock);
-	// }
-	return (not_dead(main,philos->next));
+	return (not_dead(main, philos->next));
+}
+
+void	start_time(t_philo *philo)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	philo->start_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+}
+
+int	current_time(t_philo *philo)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->start_time);
 }

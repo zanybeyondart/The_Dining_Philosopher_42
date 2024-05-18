@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:51:14 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/12 17:37:54 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/18 14:44:31 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,6 @@ void	join_threads(t_philo *philos)
 	}
 }
 
-void	start_time(t_philo *philo)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	philo->start_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
-}
-
-int	current_time(t_philo *philo)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - philo->start_time);
-}
-
 void	*monitor(void *ag)
 {
 	t_main		*main;
@@ -77,10 +61,11 @@ void	*monitor(void *ag)
 		if (main->philo_dead == 1)
 		{
 			pthread_mutex_unlock(&main->p_lock);
-			break;
+			break ;
 		}
 		pthread_mutex_unlock(&main->p_lock);
 	}
+	return (NULL);
 }
 
 int	main(int ac, char **av)
@@ -92,7 +77,6 @@ int	main(int ac, char **av)
 	main->philos = init_thread(atoi(av[1]));
 	main->eat_time = atoi(av[3]);
 	main->current_time = 0;
-	main->start_time = 0;
 	main->sleep_time = atoi(av[4]);
 	main->dead_time = atoi(av[2]);
 	main->philo_dead = 0;
