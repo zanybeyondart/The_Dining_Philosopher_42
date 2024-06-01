@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:51:14 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/18 14:44:31 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/26 20:33:51 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ void	threader(t_philo *current_philo, t_main *main)
 	data = smart_malloc(sizeof(t_thread));
 	data->philo = current_philo;
 	data->main = main;
-	pthread_mutex_lock(&main->p_lock);
 	start_time(current_philo);
-	pthread_mutex_unlock(&main->p_lock);
 	pthread_create(&current_philo->thread, NULL, function, (void *)data);
 }
 
@@ -46,27 +44,26 @@ void	join_threads(t_philo *philos)
 	}
 }
 
-void	*monitor(void *ag)
-{
-	t_main		*main;
+// void	*monitor(void *ag)
+// {
+// 	t_main		*main;
 
-	main = (t_main *)ag;
-	while (1)
-	{
-		usleep(100);
-		pthread_mutex_lock(&main->p_lock);
-		not_dead(main, main->philos);
-		pthread_mutex_unlock(&main->p_lock);
-		pthread_mutex_lock(&main->p_lock);
-		if (main->philo_dead == 1)
-		{
-			pthread_mutex_unlock(&main->p_lock);
-			break ;
-		}
-		pthread_mutex_unlock(&main->p_lock);
-	}
-	return (NULL);
-}
+// 	main = (t_main *)ag;
+// 	while (1)
+// 	{
+// 		pthread_mutex_lock(&main->p_lock);
+// 		not_dead(main, main->philos);
+// 		pthread_mutex_unlock(&main->p_lock);
+// 		pthread_mutex_lock(&main->p_lock);
+// 		if (main->philo_dead == 1)
+// 		{
+// 			pthread_mutex_unlock(&main->p_lock);
+// 			break ;
+// 		}
+// 		pthread_mutex_unlock(&main->p_lock);
+// 	}
+// 	return (NULL);
+// }
 
 int	main(int ac, char **av)
 {

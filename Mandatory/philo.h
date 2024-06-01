@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:53:25 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/18 14:48:13 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/19 15:40:33 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_main
 	int					sleep_time;
 	int					dead_time;
 	int					philo_dead;
+
 	pthread_t			thread;
 }	t_main;
 
@@ -68,7 +69,7 @@ void		my_fork_pick(t_philo *philo, t_main *main);
 void		next_fork_pick(t_philo *philo, t_main *main);
 void		sleeping(t_philo *philo, t_main *main);
 void		thinking(t_philo *philo, t_main *main);
-void		eating(t_philo *philo, t_main *main);
+int			eating(t_philo *philo, t_main *main);
 int			magic_time(struct timeval time_main);
 int			not_dead(t_main *main, t_philo *philos);
 int			current_time(t_philo *philo);

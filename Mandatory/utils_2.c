@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:11:54 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/18 14:31:47 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/31 15:12:23 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,35 @@ void	assign_forks(t_philo *philo, int *first_fork, pthread_mutex_t *first_m)
 	}
 }
 
+// int	not_dead(t_main *main, t_philo *philos)
+// {
+// 	if (philos == NULL || main->philo_dead == 1)
+// 		return (1);
+// 	if (philos->eating == 1)
+// 		return (not_dead(main, philos->next));
+// 	if (current_time(philos) - philos->last_meal >= main->dead_time
+// 		&& main->philo_dead != 1)
+// 	{
+// 		printf("%d %d died\n", current_time(philos), philos->id);
+// 		main->philo_dead = 1;
+// 		return (not_dead(main, philos->next));
+// 	}
+// 	return (not_dead(main, philos->next));
+// }
+
 int	not_dead(t_main *main, t_philo *philos)
 {
-	if (philos == NULL || main->philo_dead == 1)
-		return (1);
-	if (philos->eating == 1)
-		return (not_dead(main, philos->next));
-	if (current_time(philos) - philos->last_meal >= main->dead_time
-		&& main->philo_dead != 1)
+	pthread_mutex_lock(&main->p_lock);
+	if (current_time(philos) - philos->last_meal > main->dead_time && main->philo_dead != 1)
 	{
 		printf("%d %d died\n", current_time(philos), philos->id);
 		main->philo_dead = 1;
-		return (not_dead(main, philos->next));
+		pthread_mutex_unlock(&main->p_lock);
+		return (0);
 	}
-	return (not_dead(main, philos->next));
+	else
+		pthread_mutex_unlock(&main->p_lock);
+	return (1);
 }
 
 void	start_time(t_philo *philo)

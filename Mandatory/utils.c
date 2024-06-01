@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:52:56 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/18 14:49:39 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/19 15:41:06 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	add_to_list(t_philo *philo, int index)
 	temp->eating = 0;
 	temp->last_meal = 0;
 	temp->my_fork[1] = 0;
+	temp->start_time = 0;
 	temp->start_time = 0;
 	pthread_mutex_init(temp->my_mutex, NULL);
 	temp->next_fork = NULL;

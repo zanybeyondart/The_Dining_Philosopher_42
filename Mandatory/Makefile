@@ -1,5 +1,5 @@
 NAME = philo
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread
 SRC = philo.c\
 	forks.c\
 	parsing.c\

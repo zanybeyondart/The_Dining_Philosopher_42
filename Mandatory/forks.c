@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:42:02 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/18 14:42:19 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/05/26 20:38:04 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	my_fork_pick(t_philo *philo, t_main *main)
 {
 	pthread_mutex_lock(philo->my_mutex);
 	pthread_mutex_lock(&main->p_lock);
-	if (main->philo_dead != 1)
+	if (main->philo_dead != 1 && philo->my_fork)
 	{
 		printf("%d %d picked up a fork\n", current_time(philo), philo->id);
 		pthread_mutex_unlock(&main->p_lock);
@@ -30,7 +30,7 @@ void	next_fork_pick(t_philo *philo, t_main *main)
 {
 	pthread_mutex_lock(philo->next_mutex);
 	pthread_mutex_lock(&main->p_lock);
-	if (main->philo_dead != 1)
+	if (main->philo_dead != 1 && philo->next_fork)
 	{
 		printf("%d %d picked up a fork\n", current_time(philo), philo->id);
 		pthread_mutex_unlock(&main->p_lock);
