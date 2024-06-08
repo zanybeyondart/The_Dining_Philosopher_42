@@ -3,14 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zvakil <zvakil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:51:14 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/26 20:33:51 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/06/08 22:38:22 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_atoi(const char *str)
+{
+	int	a;
+	int	b;
+	int	neg;
+
+	b = 0;
+	a = 0;
+	while ((str[a] >= 9 && str[a] <= 13) || str[a] == ' ')
+		a++;
+	if (str[a] == '+' || str[a] == '-')
+	{
+		if (str[a] == '-')
+			neg = 1;
+		a++;
+	}
+	while (str[a] >= '0' && str[a] <= '9')
+	{
+		b = b * 10 + (str[a] - 48);
+		a++;
+	}
+	if (neg == 1)
+		return (b * -1);
+	else
+		return (b);
+}
 
 void	threader(t_philo *current_philo, t_main *main)
 {
@@ -19,7 +46,6 @@ void	threader(t_philo *current_philo, t_main *main)
 	data = smart_malloc(sizeof(t_thread));
 	data->philo = current_philo;
 	data->main = main;
-	start_time(current_philo);
 	pthread_create(&current_philo->thread, NULL, function, (void *)data);
 }
 
@@ -28,6 +54,7 @@ void	create_threads(t_main *main)
 	t_philo	*current_philo;
 
 	current_philo = main->philos;
+	main->start_time = current_time(main);
 	while (current_philo)
 	{
 		threader(current_philo, main);
@@ -44,46 +71,31 @@ void	join_threads(t_philo *philos)
 	}
 }
 
-// void	*monitor(void *ag)
-// {
-// 	t_main		*main;
-
-// 	main = (t_main *)ag;
-// 	while (1)
-// 	{
-// 		pthread_mutex_lock(&main->p_lock);
-// 		not_dead(main, main->philos);
-// 		pthread_mutex_unlock(&main->p_lock);
-// 		pthread_mutex_lock(&main->p_lock);
-// 		if (main->philo_dead == 1)
-// 		{
-// 			pthread_mutex_unlock(&main->p_lock);
-// 			break ;
-// 		}
-// 		pthread_mutex_unlock(&main->p_lock);
-// 	}
-// 	return (NULL);
-// }
-
 int	main(int ac, char **av)
 {
 	t_main	*main;
 
-	check_arguments(ac, av);
-	main = smart_malloc(sizeof(t_main));
-	main->philos = init_thread(atoi(av[1]));
-	main->eat_time = atoi(av[3]);
-	main->current_time = 0;
-	main->sleep_time = atoi(av[4]);
-	main->dead_time = atoi(av[2]);
-	main->philo_dead = 0;
-	pthread_mutex_init(&main->p_lock, NULL);
-	assign_forks(main->philos, NULL, NULL);
-	pthread_create(&main->thread, NULL, monitor, main);
-	create_threads(main);
-	join_threads(main->philos);
-	pthread_join(main->thread, NULL);
-	pthread_mutex_destroy(&main->p_lock);
-	free_program(main->philos);
-	free(main);
+	if (check_arguments(ac, av))
+	{
+		main = smart_malloc(sizeof(t_main));
+		main->philos = init_thread(ft_atoi(av[1]));
+		main->eat_time = ft_atoi(av[3]);
+		main->current_time = 0;
+		main->sleep_time = ft_atoi(av[4]);
+		main->dead_time = ft_atoi(av[2]);
+		main->philo_dead = 0;
+		if (av[5])
+			main->meals = ft_atoi(av[5]);
+		else
+			main->meals = -1;
+		pthread_mutex_init(&main->p_lock, NULL);
+		assign_forks(main->philos, NULL, NULL);
+		create_threads(main);
+		join_threads(main->philos);
+		pthread_mutex_destroy(&main->p_lock);
+		free_program(main->philos);
+		free(main);
+		return (0);
+	}
+	return (1);
 }

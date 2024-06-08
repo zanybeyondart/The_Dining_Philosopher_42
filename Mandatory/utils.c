@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zvakil <zvakil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:52:56 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/19 15:41:06 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/06/08 22:33:20 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,14 @@ void	free_program(t_philo *philo)
 	free(philo);
 }
 
-void	exit_mes(char *mes)
+void	thinking(t_philo *philo, t_main *main)
 {
-	printf("%s\n", mes);
-	exit (0);
-}
-
-int	magic_time(struct timeval time_main)
-{
-	struct timeval	time;
-	long			sec;
-	int				usec;
-
-	gettimeofday(&time, NULL);
-	sec = time.tv_sec - time_main.tv_sec;
-	usec = time.tv_usec - time_main.tv_usec;
-	return (sec * 1000 + usec / 1000);
+	if (not_dead(main, philo))
+	{
+		pthread_mutex_lock(&main->p_lock);
+		printf("%d %d is thinking\n", current_time(main), philo->id);
+		pthread_mutex_unlock(&main->p_lock);
+	}
 }
 
 void	add_to_list(t_philo *philo, int index)
@@ -78,6 +70,7 @@ t_philo	*init_thread(int philos)
 	philo->my_fork[1] = 0;
 	philo->eating = 0;
 	philo->last_meal = 0;
+	philo->meals = 0;
 	philo->start_time = 0;
 	pthread_mutex_init(philo->my_mutex, NULL);
 	philo->next_fork = NULL;

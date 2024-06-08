@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zvakil <zvakil@student.42abudhabi.ae>      +#+  +:+       +#+        */
+/*   By: zvakil <zvakil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 11:53:25 by zvakil            #+#    #+#             */
-/*   Updated: 2024/05/19 15:40:33 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/06/08 22:40:07 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 	int					last_meal;
 	int					start_time;
 	int					eating;
+	int					meals;
 	struct s_philo		*next;
 }	t_philo;
 
@@ -43,7 +44,8 @@ typedef struct s_main
 	int					sleep_time;
 	int					dead_time;
 	int					philo_dead;
-
+	int					start_time;
+	int					meals;
 	pthread_t			thread;
 }	t_main;
 
@@ -54,26 +56,26 @@ typedef struct s_thread
 	struct s_thread		*next;
 }	t_thread;
 
-void		check_arguments(int ac, char **av);
+int			check_arguments(int ac, char **av);
+int			ft_atoi(const char *str);
 void		exit_mes(char *mes);
-void		*monitor(void *ag);
-void		check_if_invalid(char *av);
 void		*smart_malloc(size_t size);
-void		free_program(t_philo *philo);
-void		thread_create(t_philo *philos);
-void		*function(void *ag);
+t_philo		*init_thread(int philos);
 void		add_to_list(t_philo *philo, int index);
 void		assign_forks(t_philo *philo, int *fork, pthread_mutex_t *mutex);
+void		create_threads(t_main *main);
+void		threader(t_philo *current_philo, t_main *main);
 void		*function(void *ag);
-void		my_fork_pick(t_philo *philo, t_main *main);
-void		next_fork_pick(t_philo *philo, t_main *main);
-void		sleeping(t_philo *philo, t_main *main);
-void		thinking(t_philo *philo, t_main *main);
-int			eating(t_philo *philo, t_main *main);
-int			magic_time(struct timeval time_main);
 int			not_dead(t_main *main, t_philo *philos);
-int			current_time(t_philo *philo);
+int			current_time(t_main *main);
+int			eating(t_philo *philo, t_main *main);
+void		join_threads(t_philo *philos);
+void		free_program(t_philo *philo);
+void		thread_create(t_philo *philos);
+void		sleeping(t_philo *philo, t_main *main);
+int			not_dead(t_main *main, t_philo *philos);
+int			current_time(t_main *main);
 void		start_time(t_philo *philo);
-t_philo		*init_thread(int philos);
+void		thinking(t_philo *philo, t_main *main);
 
 #endif

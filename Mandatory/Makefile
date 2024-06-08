@@ -1,7 +1,6 @@
 NAME = philo
 CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread
 SRC = philo.c\
-	forks.c\
 	parsing.c\
 	utils.c\
 	routine.c\
