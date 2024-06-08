@@ -6,7 +6,7 @@
 /*   By: zvakil <zvakil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 11:49:30 by zvakil            #+#    #+#             */
-/*   Updated: 2024/06/08 22:21:08 by zvakil           ###   ########.fr       */
+/*   Updated: 2024/06/09 00:26:30 by zvakil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,12 @@ int	eating(t_philo *philo, t_main *main)
 	}
 	else
 	{
-		usleep(1);
-		pick_fork(philo->my_mutex, philo->my_fork, main, philo);
+		usleep(500);
 		pick_fork(philo->next_mutex, philo->next_fork, main, philo);
+		pick_fork(philo->my_mutex, philo->my_fork, main, philo);
 	}
 	if (philo->my_fork && philo->next_fork)
-	{
 		eat_mode(main, philo);
-	}
 	return (1);
 }
 
